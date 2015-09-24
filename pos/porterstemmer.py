@@ -346,8 +346,10 @@ class PorterStemmer:
 
 if __name__ == '__main__':
     p = PorterStemmer()
-    outfile = open("stemmed.txt",'w')
+    outfile = open("stemmed1.txt",'w')
+    
     outfile.write("")
+    
     if len(sys.argv) > 1:
         for f in sys.argv[1:]:
             infile = open(f, 'r')
@@ -365,7 +367,8 @@ if __name__ == '__main__':
                             output += p.stem(word, 0,len(word)-1)
                             word = ''
                         output += c.lower()
-                outfile = open("stemmed.txt",'a')
-                outfile.write(output)                
+                outfile = open("stemmed1.txt",'a')
+                outfile.write(output)
+                                
                 #print output,
             infile.close()

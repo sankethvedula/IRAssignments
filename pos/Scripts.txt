@@ -1,0 +1,4 @@
+perl -e'rename $_, $i++.q(.txt) while(<*.txt>)'
+sort -d stemmed1.txt | tee outpput.txt
+awk '!seen[$0]++' output.txt | tee dict.txt
+

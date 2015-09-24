@@ -1,0 +1,2 @@
+perl -e'rename $_, $i++.q(.txt) while(<*.txt>)'
+uniq -u output.txt | tee dic.txt
