@@ -420,50 +420,124 @@ if __name__ == "__main__":
 
 	
 	p = PorterStemmer()
+while 1:
+    print "Entered query loop\n"
+    output = ''
+    word = ''
+    line = raw_input("Enter the query\n")
+    line = line + " "
+    line_tokens_revised = nltk.word_tokenize(line)
+    removed_tokens = []
+    nonremoved_tokens = []
+    for term2 in line_tokens_revised:
+        if re.match("^[a-zA-Z]*$",term2):
+            nonremoved_tokens.append(term2)
+        elif re.match("^[0-9]*$",term2):
+            removed_tokens.append(term2)
+        else:
+            removed_tokens.append(term2)
+    line_revised = ''
+    for term3 in nonremoved_tokens:
+        line_revised = line_revised + term3 + " "
+    if line == "q ":
+        print "exiting AnyDayBetterThanGoogle"
+        break
 
-print "Entered query loop\n"
-output = ''
-word = ''
-line = raw_input("Enter the query\n")
-line = line + " "
+    for c in line_revised:
+        if c.isalpha():
+            print c
+            word += c.lower()
+        else:
+            if word:
+                output += p.stem(word,0,len(word)-1)
+                word =''
+                output += c.lower()
+                print output
+    lineTokens=nltk.word_tokenize(line)
+    for term1 in removed_tokens:
+        output=output + " " + term1
+    queryTerms = nltk.word_tokenize(output)
+    print queryTerms
+    queryll = []                                                               # queryll is list of postinglists of query terms.
+    templist = []                                                              # storing the posting list temporarily in each case and finally appending to queryll
+    null = []                                                                  # push null if the term doesn't exist in the vocabulary
+    print "entering the query execution process...\n"
+    for term in queryTerms:
+        print "Entered a term..\n"
+        
+        if (re.match("^[a-zA-Z0-9]*$",term)and(term not in stop)):
+            if re.match("^[0-9]*$",term):
+                indices = [i for i, x in enumerate(lnum) if x == term]
+                length_indices = len(indices)
+                for i in range(0,length_indices):
+                    for j in range(0,len(llnum[indices[i]])):
+                        templist.append(llnum[indices[i]][j])
+                    
+                
+                templist.sort()
+                print templist
+                queryll.append(templist)
+            elif re.match("^[a-zA-Z]*$",term):
+                try:
+                    index1 = lword.index(term)
+                    print len(llword[index1])
+                    queryll.append(llword[index1])
+                except ValueError:
+                    queryll.append(null)
+                #if index1>0:
+                    
+            else:
+                try:
+                   index1 = lmixed.index(term)
+                   print len(llmixed[index1])
+                   queryll.append(llmixed[index1])
 
-for c in line:
-	if c.isalpha():
-		print c
-		word += c.lower()
-	else:
-		if word:
-			output += p.stem(word,0,len(word)-1)
- 			word =''
- 			output += c.lower()
- 			print output
-queryTerms = nltk.word_tokenize(output)
-print queryTerms
-queryll = []
-templist = []
-print "entering the query execution process...\n"
-for term in queryTerms:
-	print "Entered a term..\n"
-	index1 = 0
-	if (re.match("^[a-zA-Z0-9]*$",term)and(term not in stop)):
-	    if re.match("^[0-9]*$",term):
-	    	indices = [i for i, x in enumerate(lnum) if x == term]
-	    	length_indices = len(indices)
-	    	for i in range(0,length_indices):
-	    		templist.append(llnum[indices[i]])
-	    	
-	    	templist.sort()
-	    	print templist
-	    	queryll.append(templist)
-	    elif re.match("^[a-zA-Z]*$",term):
-	    	index1 = lword.index(term)
-	    	print len(llword[index1])
-	    	queryll.append(llword[index1])
-	    else:
-	    	index1 = lmixed.index(term)
-	    	queryll.append(llmixed[index1])
+                except ValueError:
+                    queryll.append(null)
+                #if index1 > 0:
+    postingLists = len(queryll)                                             # length of queryll
+    i =0                                                                    # pointer of 1st posting list
+    j =0                                                                    # pointer of 2nd posting list
+    temp_post = []                                                          # temporarily stores the intersection(LOGICAL AND) of posting lists 1 and 2
+    if  postingLists <= 1:
+        print queryll
+        continue
 
-print lnum[0]
-print llnum[0]
-print queryll
+    while i < len(queryll[0]) and j < len(queryll[1]):
+        if queryll[0][i] == queryll[1][j]:
+            temp_post.append(queryll[0][i])
+            i+=1
+            j+=1
+        elif queryll[0][i] < queryll[1][j]:
+            i+=1
+        else:
+            j+=1
+   
+    k=0
+    for k in range(2,postingLists):
+        rewrite=0
+        i=0
+        j=0
+        while i < len(temp_post) and j < len(queryll[k]):
+            if temp_post[i] == queryll[k][j]:
+                temp_post[rewrite]=temp_post[i]
+                rewrite+=1
+                i+=1
+                j+=1
+            elif temp_post[i] < queryll[k][j]:
+                i+=1
+            else:
+                j+=1
+        del temp_post[rewrite:len(temp_post)]
+    print temp_post
+
+
+
+
+
+
+
+                    
+
+
 #for i in range (0,queryLen):'''	# query processing start 
