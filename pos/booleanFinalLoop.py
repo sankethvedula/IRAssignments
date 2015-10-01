@@ -427,6 +427,38 @@ while 1:
     line = raw_input("Enter the query\n")
     line = line + " "
     line_tokens_revised = nltk.word_tokenize(line)
+    wildCardTokens = []
+    for wildcard in line_tokens_revised:
+    	if "*" in wildcard:
+    		wildCardTokens.append(wildcard)
+    		line_tokens_revised.remove(wildcard)
+    #wildCardQuery = 
+    wildLists = []
+    for wildcard in wildCardTokens:
+    	wildIndex = wildcard.index("*")
+    	i =0
+    	if wildIndex > 0 :
+    		wildPart = wildcard[0:wildIndex]
+    		
+    		for words in lword:
+    			if words.startswith(wildPart):
+    				print words
+    				wildLists.append(llword[i])
+    				i = i +1
+
+    	else:
+    		wildPart = wildcard[1:]
+    		for words in lword:
+    			if words.endswith(wildPart):
+    				print words
+    				wildLists.append(llword[i])
+    				i = i +1
+
+
+    print len(wildLists)
+    print wildLists
+    i = 0
+    words = ""		
     removed_tokens = []
     nonremoved_tokens = []
     for term2 in line_tokens_revised:
