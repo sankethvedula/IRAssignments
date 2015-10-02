@@ -433,6 +433,11 @@ while 1:
     		wildCardTokens.append(wildcard)
     		line_tokens_revised.remove(wildcard)
     #wildCardQuery = 
+    queryOps = []
+    for terms1 in line_tokens_revised:
+    	if terms1 == "|" or terms1 == "&":
+    		queryOps.append(terms1)
+    		line_tokens_revised.remove(terms1)
     wildLists = []
     for wildcard in wildCardTokens:
     	wildIndex = wildcard.index("*")
